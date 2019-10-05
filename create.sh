@@ -12,6 +12,12 @@ then
     exit 255
 fi
 
+if [ $2 = "none" ]
+then
+    echo "Region none is invalid. Please choose another region"
+    exit 255
+fi
+
 CLUSTER_NAME="$1"
 REGION="$2"
 
