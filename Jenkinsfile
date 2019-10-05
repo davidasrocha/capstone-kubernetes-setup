@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Setup Cluster') {
             when {
-                branch 'setup'
+                branch 'master'
             }
             steps {
                 withAWS(region: 'us-west-2') {
