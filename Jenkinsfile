@@ -1,0 +1,17 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Setup Cluster') {
+            when {
+                branch 'setup'
+            }
+            steps {
+                withAWS(region: 'us-west-2') {
+                    // TODO: insert input option
+                    sh './create.sh capstone us-west-2'
+                }
+            }
+        }
+    }
+}
