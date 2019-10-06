@@ -12,7 +12,7 @@ pipeline {
     stages {
         stage('Operations to Cluster') {
             when {
-                branch 'master'
+                branch: "master"
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
@@ -22,7 +22,10 @@ pipeline {
         }
         stage('Initialize Helm and Install Tiller') {
             when {
-                branch 'master'
+                branch: "master"
+            }
+            when {
+                equals expected: "create", actual: "${params.OPERATION}"
             }
             environment {
                 KUBECONFIG = "$PWD/.kube/config"
