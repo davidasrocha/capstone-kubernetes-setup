@@ -11,9 +11,6 @@ pipeline {
 
     stages {
         stage('Operations to Cluster') {
-            when {
-                branch "master"
-            }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
                     sh "./${params.OPERATION}.sh ${params.CLUSTER_NAME} ${params.REGION}"
@@ -21,9 +18,6 @@ pipeline {
             }
         }
         stage('Initialize Helm and Install Tiller') {
-            when {
-                branch "master"
-            }
             when {
                 equals expected: "create", actual: "${params.OPERATION}"
             }
