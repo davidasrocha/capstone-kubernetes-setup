@@ -29,4 +29,5 @@ eksctl create cluster \
     --region "$REGION" \
     --nodes 3 \
     --nodes-min 1 \
-    --nodes-max 4
+    --nodes-max 4 \
+    --kubeconfig "$PWD/.kube/config"
