@@ -20,5 +20,16 @@ pipeline {
                 }
             }
         }
+        stage('Initialize Helm and Install Tiller') {
+            environment {
+                KUBECONFIG = "$PWD/.kube/config"
+            }
+            steps {
+                withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
+                    sh "echo $KUBECONFIG"
+                    sh "helm init --history-max 200"
+                }
+            }
+        }
     }
 }
