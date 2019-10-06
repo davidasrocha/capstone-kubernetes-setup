@@ -21,6 +21,9 @@ pipeline {
             }
         }
         stage('Initialize Helm and Install Tiller') {
+            when {
+                branch 'master'
+            }
             environment {
                 KUBECONFIG = "$PWD/.kube/config"
             }
