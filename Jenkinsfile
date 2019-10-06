@@ -19,7 +19,7 @@ pipeline {
         }
         stage('Initialize Helm and Install Tiller') {
             when {
-                equals expected: "create", actual: "${params.OPERATION}"
+                expression { params.OPERATION == 'create' }
             }
             environment {
                 KUBECONFIG = "$PWD/.kube/config"
