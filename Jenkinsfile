@@ -32,12 +32,9 @@ pipeline {
                     expression { params.OPERATION == 'create' }
                 }
             }
-            environment {
-                KUBECONFIG = "$PWD/.kube/config"
-            }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "helm --kubeconfig $KUBECONFIG init --history-max 100"
+                    sh "helm --kubeconfig $PWD/.kube/config init --history-max 100"
                 }
             }
         }
