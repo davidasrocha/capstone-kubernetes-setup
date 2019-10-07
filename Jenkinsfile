@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "helm --kubeconfig $PWD/.kube/config init --history-max 100"
+                    sh "helm --kubeconfig $WORKSPACE/.kube/config init --history-max 100"
                 }
             }
         }
@@ -43,12 +43,9 @@ pipeline {
                 expression { params.OPERATION == 'create' }
                 expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
             }
-            environment {
-                KUBECONFIG = "$PWD/.kube/config"
-            }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    s3Upload(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
+                    s3Upload(file: "$WORKSPACE/.kube/config", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
                 }
             }
         }
