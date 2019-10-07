@@ -6,8 +6,6 @@ pipeline {
 
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Provide a name to bucket to store Kubernetes Cluster configuration')
 
-        string(name: 'KUBECONFIG_NAME', defaultValue: '', description: 'Provide a name to Kubernetes Cluster configuration file')
-
         choice(name: 'OPERATION', choices: ['create', 'delete'], description: 'Choose an operation to Kubernetes Cluster')
 
         choice(name: 'REGION', choices: ['us-west-1', 'us-west-2', 'none'], description: 'Choose an AWS region to deploy the Kubernetes Cluster')
@@ -43,17 +41,28 @@ pipeline {
                 }
             }
         }
-        stage('Upload configuration to S3') {
+        stage('Save configuration') {
             when {
-                expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' && params.KUBECONFIG_NAME != '' }
                 expression { params.OPERATION == 'create' }
+                expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
             }
             environment {
                 KUBECONFIG = "$PWD/.kube/config"
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    s3Upload(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.KUBECONFIG_NAME}")
+                    s3Upload(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
+                }
+            }
+        }
+        stage('Remove configuration') {
+            when {
+                expression { params.OPERATION == 'delete' }
+                expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
+            }
+            steps {
+                withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
+                    s3Delete(bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
                 }
             }
         }
