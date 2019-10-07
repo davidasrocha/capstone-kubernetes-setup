@@ -39,7 +39,7 @@ pipeline {
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "helm init --history-max 200"
+                    sh "helm --kubeconfig $KUBECONFIG init --history-max 100"
                 }
             }
         }
