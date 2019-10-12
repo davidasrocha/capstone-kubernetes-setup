@@ -9,6 +9,11 @@ pipeline {
         choice(name: 'OPERATION', choices: ['create', 'delete'], description: 'Choose an operation to Kubernetes Cluster')
 
         choice(name: 'REGION', choices: ['us-west-1', 'us-west-2', 'none'], description: 'Choose an AWS region to deploy the Kubernetes Cluster')
+
+        choice(name: 'PRIVATE_DOCKER_HUB', choices: ['no', 'yes'], description: 'Will use Private Docker Hub Account?')
+        string(name: 'PRIVATE_DOCKER_USERNAME', defaultValue: '', description: 'Docker Hub Username')
+        string(name: 'PRIVATE_DOCKER_PASSWORD', defaultValue: '', description: 'Docker Hub Password')
+        string(name: 'PRIVATE_DOCKER_EMAIL', defaultValue: '', description: 'Docker Hub E-mail')
     }
 
     stages {
@@ -58,6 +63,17 @@ pipeline {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
                     s3Delete(bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
                 }
+            }
+        }
+        stage('Configure Docker Hub Registry') {
+            when {
+                allOf {
+                    expression { params.PRIVATE_DOCKER_HUB == 'yes' }
+                    expression { params.PRIVATE_DOCKER_USERNAME != '' && params.PRIVATE_DOCKER_PASSWORD != '' && params.PRIVATE_DOCKER_EMAIL != ''}
+                }
+            }
+            steps {
+                sh "kubectl create secret docker-registry ${params.PRIVATE_DOCKER_HUB} --docker-username=${params.PRIVATE_DOCKER_USERNAME} --docker-password=${params.PRIVATE_DOCKER_PASSWORD} --docker-email=${params.PRIVATE_DOCKER_EMAIL}"
             }
         }
     }
