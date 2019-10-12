@@ -8,7 +8,7 @@ pipeline {
 
         choice(name: 'OPERATION', choices: ['create', 'delete'], description: 'Choose an operation to Kubernetes Cluster')
 
-        choice(name: 'REGION', choices: ['us-west-1', 'us-west-2', 'none'], description: 'Choose an AWS region to deploy the Kubernetes Cluster')
+        choice(name: 'REGION', choices: ['us-west-1', 'us-west-2'], description: 'Choose an AWS region to deploy the Kubernetes Cluster')
 
         choice(name: 'PRIVATE_DOCKER_HUB', choices: ['no', 'yes'], description: 'Will use Private Docker Hub Account?')
         string(name: 'PRIVATE_DOCKER_USERNAME', defaultValue: '', description: 'Docker Hub Username')
