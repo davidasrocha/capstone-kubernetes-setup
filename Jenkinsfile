@@ -30,6 +30,17 @@ pipeline {
                 }
             }
         }
+        stage('Configure Docker Hub Registry') {
+            when {
+                allOf {
+                    expression { params.PRIVATE_DOCKER_HUB == 'yes' }
+                    expression { params.PRIVATE_DOCKER_USERNAME != '' && params.PRIVATE_DOCKER_PASSWORD != '' && params.PRIVATE_DOCKER_EMAIL != ''}
+                }
+            }
+            steps {
+                sh "kubectl create secret docker-registry ${params.PRIVATE_DOCKER_HUB} --docker-username=${params.PRIVATE_DOCKER_USERNAME} --docker-password=${params.PRIVATE_DOCKER_PASSWORD} --docker-email=${params.PRIVATE_DOCKER_EMAIL}"
+            }
+        }
         stage('Initialize Helm and Install Tiller') {
             when {
                 allOf {
@@ -63,17 +74,6 @@ pipeline {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
                     s3Delete(bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
                 }
-            }
-        }
-        stage('Configure Docker Hub Registry') {
-            when {
-                allOf {
-                    expression { params.PRIVATE_DOCKER_HUB == 'yes' }
-                    expression { params.PRIVATE_DOCKER_USERNAME != '' && params.PRIVATE_DOCKER_PASSWORD != '' && params.PRIVATE_DOCKER_EMAIL != ''}
-                }
-            }
-            steps {
-                sh "kubectl create secret docker-registry ${params.PRIVATE_DOCKER_HUB} --docker-username=${params.PRIVATE_DOCKER_USERNAME} --docker-password=${params.PRIVATE_DOCKER_PASSWORD} --docker-email=${params.PRIVATE_DOCKER_EMAIL}"
             }
         }
     }
