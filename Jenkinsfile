@@ -4,7 +4,7 @@ pipeline {
     parameters {
         string(name: 'CLUSTER_NAME', defaultValue: '', description: 'Provide a name to Kubernetes Cluster')
 
-        string(name: 'BUCKET_NAME', defaultValue: '', description: 'Provide a name to bucket to store Kubernetes Cluster configuration')
+        string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name to store Kubernetes Cluster configuration')
 
         choice(name: 'OPERATION', choices: ['create', 'delete'], description: 'Choose an operation to Kubernetes Cluster')
 
