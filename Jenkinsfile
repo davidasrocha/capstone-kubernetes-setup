@@ -25,16 +25,21 @@ pipeline {
                 }
             }
         }
-        stage('Configure Docker Hub Registry') {
+        stage('Configure Docker Registry Secret') {
             when {
                 allOf {
                     expression { params.CLUSTER_NAME != '' }
                     expression { params.OPERATION == 'create' }
                 }
             }
+            environment {
+                KUBECONFIG = "$WORKSPACE/.kube/config"
+            }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "./devops_kubernetes_secret_docker_hub.sh ${params.CLUSTER_NAME} DEVOPS_DOCKER_HUB_KEY"
+                    sh "mkdir -p $WORKSPACE/.kube/"
+                    s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}-docker-registry-secret.yaml", force: true)
+                    sh "kubectl apply -f $KUBECONFIG"
                 }
             }
         }
