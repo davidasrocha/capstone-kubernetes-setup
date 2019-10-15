@@ -47,7 +47,7 @@ pipeline {
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "helm --kubeconfig $WORKSPACE/.kube/config init --history-max 100"
+                    sh "helm --kubeconfig $WORKSPACE/.kube/config init --upgrade --history-max 100"
                 }
             }
         }
