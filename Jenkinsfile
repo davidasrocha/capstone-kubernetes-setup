@@ -25,6 +25,32 @@ pipeline {
                 }
             }
         }
+        stage('Manage configuration') {
+            parallel {
+                stage('Save configuration') {
+                    when {
+                        expression { params.OPERATION == 'create' }
+                        expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
+                    }
+                    steps {
+                        withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
+                            s3Upload(file: "$WORKSPACE/.kube/config", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
+                        }
+                    }
+                }
+                stage('Remove configuration') {
+                    when {
+                        expression { params.OPERATION == 'delete' }
+                        expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
+                    }
+                    steps {
+                        withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
+                            s3Delete(bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
+                        }
+                    }
+                }
+            }
+        }
         stage('Configure Docker Registry Secret') {
             when {
                 allOf {
@@ -53,28 +79,6 @@ pipeline {
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
                     sh "helm --kubeconfig $WORKSPACE/.kube/config init --upgrade --history-max 100"
-                }
-            }
-        }
-        stage('Save configuration') {
-            when {
-                expression { params.OPERATION == 'create' }
-                expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
-            }
-            steps {
-                withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    s3Upload(file: "$WORKSPACE/.kube/config", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
-                }
-            }
-        }
-        stage('Remove configuration') {
-            when {
-                expression { params.OPERATION == 'delete' }
-                expression { params.CLUSTER_NAME != '' && params.BUCKET_NAME != '' }
-            }
-            steps {
-                withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    s3Delete(bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}")
                 }
             }
         }
