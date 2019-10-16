@@ -23,7 +23,7 @@ REGION="$2"
 
 eksctl create cluster \
     --name "$CLUSTER_NAME" \
-    --version "1.11" \
+    --version "1.13" \
     --nodegroup-name "workers" \
     --node-type "t3.medium" \
     --region "$REGION" \
