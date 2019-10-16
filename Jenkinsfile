@@ -63,9 +63,9 @@ pipeline {
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "mkdir -p $WORKSPACE/.kube/"
-                    s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}-docker-registry-secret.yaml", force: true)
-                    sh "kubectl apply -f $KUBECONFIG"
+                    s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}", force: true)
+                    s3Download(file: "$WORKSPACE/.secrets/${params.CLUSTER_NAME}-docker-registry-secret.yaml", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}-docker-registry-secret.yaml", force: true)
+                    sh "kubectl apply -f $WORKSPACE/.secrets/${params.CLUSTER_NAME}-docker-registry-secret.yaml"
                 }
             }
         }
