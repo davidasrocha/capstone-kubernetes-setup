@@ -6,7 +6,7 @@ pipeline {
 
         string(name: 'BUCKET_NAME', defaultValue: '', description: 'Bucket name to store Kubernetes Cluster configuration')
 
-        choice(name: 'OPERATION', choices: ['create', 'delete'], description: 'Choose an operation to Kubernetes Cluster')
+        choice(name: 'OPERATION', choices: ['create', 'delete', 'update'], description: 'Choose an operation to Kubernetes Cluster')
 
         choice(name: 'REGION', choices: ['us-west-1', 'us-west-2'], description: 'Choose an AWS region to deploy the Kubernetes Cluster')
     }
@@ -51,6 +51,23 @@ pipeline {
                     s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}", force: true)
                     s3Download(file: "$WORKSPACE/.secrets/${params.CLUSTER_NAME}-docker-registry-secret.yaml", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}-docker-registry-secret.yaml", force: true)
                     sh "kubectl apply -f $WORKSPACE/.secrets/${params.CLUSTER_NAME}-docker-registry-secret.yaml"
+                }
+            }
+        }
+        stage('Configure Service Account') {
+            when {
+                allOf {
+                    expression { params.CLUSTER_NAME != '' }
+                    expression { params.OPERATION == 'create' || params.OPERATION == 'update' }
+                }
+            }
+            environment {
+                KUBECONFIG = "$WORKSPACE/.kube/config"
+            }
+            steps {
+                withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
+                    s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}", force: true)
+                    sh "kubectl patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\":\"${params.CLUSTER_NAME}-docker-registry-secret\"}]}'"
                 }
             }
         }
