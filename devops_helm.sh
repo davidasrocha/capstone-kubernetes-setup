@@ -7,7 +7,8 @@ fi
 
 echo $WORKSPACE
 
-if [ $(kubectl get serviceaccount tiller --namespace=kube-system -o jsonpath='{.metadata.uid}') = '' ]
+SERVICEACCOUNT=$(kubectl get serviceaccount tiller --namespace=kube-system -o jsonpath='{.metadata.uid}')
+if [ "$SERVICEACCOUNT" = '' ]
 then
     kubectl apply -f "$WORKSPACE/kubernetes/rbac-config.yaml"
 fi
