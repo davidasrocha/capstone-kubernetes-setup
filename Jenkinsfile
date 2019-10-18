@@ -75,12 +75,16 @@ pipeline {
             when {
                 allOf {
                     expression { params.CLUSTER_NAME != '' }
-                    expression { params.OPERATION == 'create' }
+                    expression { params.OPERATION == 'create' || params.OPERATION == 'update' }
                 }
+            }
+            environment {
+                KUBECONFIG = "$WORKSPACE/.kube/config"
             }
             steps {
                 withAWS(region: "${params.REGION}", credentials: 'AWS_DEVOPS') {
-                    sh "helm --kubeconfig $WORKSPACE/.kube/config init --upgrade --history-max 100"
+                    s3Download(file: "$KUBECONFIG", bucket: "${params.BUCKET_NAME}", path: "${params.CLUSTER_NAME}", force: true)
+                    sh "./devops_helm.sh"
                 }
             }
         }
