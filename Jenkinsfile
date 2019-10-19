@@ -24,13 +24,21 @@ pipeline {
                 }
             }
         }
-        stage('Save configuration') {
+        stage('Manage configuration file') {
             when {
-                expression { params.OPERATION == 'create' }
+                expression { params.OPERATION == 'create' || params.OPERATION == 'delete' }
             }
             steps {
                 withAWS(region: "$REGION", credentials: 'AWS_DEVOPS') {
-                    s3Upload(file: "$WORKSPACE/.kube/config", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME")
+                    script {
+                        if (params.OPERATION == 'create') {
+                            s3Upload(file: "$WORKSPACE/.kube/config", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME")
+                        }
+                        
+                        if (params.OPERATION == 'delete') {
+                            s3Delete(bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME")
+                        }
+                    }
                 }
             }
         }
