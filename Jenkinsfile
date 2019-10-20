@@ -55,7 +55,7 @@ pipeline {
                 withAWS(region: "$REGION", credentials: 'AWS_DEVOPS') {
                     s3Download(file: "$KUBECONFIG", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME", force: true)
                     s3Download(file: "$WORKSPACE/.secrets/$CLUSTER_NAME-docker-registry-secret.yaml", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME-docker-registry-secret.yaml", force: true)
-                    sh "kubectl apply -f $WORKSPACE/.secrets/$CLUSTER_NAME-docker-registry-secret.yaml"
+                    sh "./devops_docker_registry.sh"
                 }
             }
         }
