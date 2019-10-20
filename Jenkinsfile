@@ -71,7 +71,7 @@ pipeline {
             steps {
                 withAWS(region: "$REGION", credentials: 'AWS_DEVOPS') {
                     s3Download(file: "$KUBECONFIG", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME", force: true)
-                    sh "kubectl patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\":\"$CLUSTER_NAME-docker-registry-secret\"}]}'"
+                    sh "./devops_service_account.sh"
                 }
             }
         }
