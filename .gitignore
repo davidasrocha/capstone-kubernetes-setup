@@ -1,3 +1,5 @@
 .kube/*
+.secrets/*
 
-!.gitkeep
+!.kube/*.md
+!.secrets/*.md

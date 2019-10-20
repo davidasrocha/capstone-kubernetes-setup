@@ -1,0 +1,1 @@
+Jenkins pipeline store the `config` file in this folder to access in next steps.

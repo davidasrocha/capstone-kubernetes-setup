@@ -1,0 +1,1 @@
+Jenkins pipeline store the `secret` file in this folder to access in next steps.
