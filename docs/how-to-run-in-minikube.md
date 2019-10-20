@@ -5,6 +5,7 @@ You can run this project using Minikube.
 * [AWS CLI 1.16.193+](https://aws.amazon.com/cli/), is a unified tool to manage your AWS services
 * [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/), minikube implements a local Kubernetes cluster on macOS, Linux, and Windows
 * [Helm](https://helm.sh/), package manager to Kubernetes
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), command-line tool, allows you to run commands against Kubernetes clusters
 
 Configure these tool to continue.
 

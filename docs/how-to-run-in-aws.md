@@ -5,6 +5,7 @@ You can run this project using AWS EKS.
 * [AWS CLI 1.16.193+](https://aws.amazon.com/cli/), is a unified tool to manage your AWS services
 * [eksctl](https://github.com/weaveworks/eksctl), is a simple CLI tool for creating clusters on EKS - Amazon's new managed Kubernetes service for EC2
 * [Helm](https://helm.sh/), package manager to Kubernetes
+* [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), command-line tool, allows you to run commands against Kubernetes clusters
 * S3 Bucket, store cluster configurations files, secrets files and configuration maps
 
 Configure these tool to continue.
