@@ -20,7 +20,7 @@ pipeline {
             }
             steps {
                 withAWS(region: "$REGION", credentials: 'AWS_DEVOPS') {
-                    sh "./devops_${params.OPERATION}.sh $CLUSTER_NAME $REGION"
+                    sh "./aws/devops_${params.OPERATION}.sh $CLUSTER_NAME $REGION"
                 }
             }
         }
