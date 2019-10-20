@@ -4,7 +4,7 @@ This project is part of the Udacity Nanodegree Program "Cloud DevOps Engineer". 
 
 This repository contain all code required to deploy and setup a Kubernetes Cluster, after run this, you will able to deploy the [Capstone API](https://github.com/davidasrocha/capstone-api-grandmother-recipes) over this Kubernetes Cluster.
 
-You can run this project using [Minikube](./docs/how-to-run-in-minikube.md) or [AWS EKS](how-to-run-in-aws.md).
+You can run this project using [Minikube](./docs/how-to-run-in-minikube.md) or [AWS EKS](./docs/how-to-run-in-aws.md).
 
 ## Jenkins Pipeline
 
