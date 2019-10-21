@@ -4,7 +4,6 @@ You can run this project using AWS EKS.
 
 * [AWS CLI 1.16.193+](https://aws.amazon.com/cli/), is a unified tool to manage your AWS services
 * [eksctl](https://github.com/weaveworks/eksctl), is a simple CLI tool for creating clusters on EKS - Amazon's new managed Kubernetes service for EC2
-* [Helm](https://helm.sh/), package manager to Kubernetes
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), command-line tool, allows you to run commands against Kubernetes clusters
 * S3 Bucket, store cluster configurations files, secrets files and configuration maps
 
@@ -16,9 +15,7 @@ First, you can running the script `./aws/devops_create.sh capstone us-west-2`. T
 
 Second, you need to save the file `~/.kube/config` for your S3 Bucket.
 
-Third, you need to configure a service account for your pods, running the script `./devops_service_account.sh capstone`.
-
-Finally, you need to configure the Helm, running the script `./devops_helm.sh`.
+Finally, you need to configure a service account for your pods, running the script `./devops_service_account.sh capstone`.
 
 ### How to configure Docker registry
 

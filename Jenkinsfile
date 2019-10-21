@@ -75,21 +75,5 @@ pipeline {
                 }
             }
         }
-        stage('Initialize Helm and Install Tiller') {
-            when {
-                allOf {
-                    expression { params.OPERATION == 'create' || params.OPERATION == 'update' }
-                }
-            }
-            environment {
-                KUBECONFIG = "$WORKSPACE/.kube/config"
-            }
-            steps {
-                withAWS(region: "$REGION", credentials: 'AWS_DEVOPS') {
-                    s3Download(file: "$KUBECONFIG", bucket: "$BUCKET_NAME", path: "$CLUSTER_NAME", force: true)
-                    sh "./devops_helm.sh"
-                }
-            }
-        }
     }
 }

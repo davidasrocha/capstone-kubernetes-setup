@@ -4,7 +4,6 @@ You can run this project using Minikube.
 
 * [AWS CLI 1.16.193+](https://aws.amazon.com/cli/), is a unified tool to manage your AWS services
 * [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/), minikube implements a local Kubernetes cluster on macOS, Linux, and Windows
-* [Helm](https://helm.sh/), package manager to Kubernetes
 * [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/), command-line tool, allows you to run commands against Kubernetes clusters
 
 Configure these tool to continue.
@@ -26,6 +25,4 @@ kubectl create secret docker-registry capstone-docker-registry-secret \
     --docker-email=DOCKER-EMAIL
 ```
 
-Third, you need to configure a service account for your pods, running the script `./devops_service_account.sh capstone`.
-
-Finally, you need to configure the Helm, running the script `./devops_helm.sh`.
+Finally, you need to configure a service account for your pods, running the script `./devops_service_account.sh capstone`.
